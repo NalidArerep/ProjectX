@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>User Details</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    .details {
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+  <div class="details">
+    <strong>IP Address:</strong> <span id="ipAddress"></span>
+  </div>
+  <div class="details">
+    <strong>Location:</strong> <span id="location"></span>
+  </div>
+  <div class="details">
+    <strong>Operating System:</strong> <span id="os"></span>
+  </div>
+
+  <script>
+    // Function to get user's IP address
+    async function getIpAddress() {
+      const response = await fetch('https://api.ipify.org?format=json');
+      const data = await response.json();
+      return data.ip;
+    }
+
+    // Function to get user's location
+    async function getLocation() {
+      const response = await fetch('https://ipapi.co/json/');
+      const data = await response.json();
+      return `${data.city}, ${data.region}, ${data.country_name}`;
+    }
+
+    // Function to get user's operating system
+    function getOS() {
+      const userAgent = window.navigator.userAgent;
+      let os = "Unknown";
+      if (userAgent.indexOf("Windows NT 10.0") !== -1) os = "Windows 10";
+      else if (userAgent.indexOf("Windows NT 6.2") !== -1) os = "Windows 8";
+      else if (userAgent.indexOf("Windows NT 6.1") !== -1) os = "Windows 7";
+      else if (userAgent.indexOf("Windows NT 6.0") !== -1) os = "Windows Vista";
+      else if (userAgent.indexOf("Windows NT 5.1") !== -1) os = "Windows XP";
+      else if (userAgent.indexOf("Mac") !== -1) os = "Mac/iOS";
+      else if (userAgent.indexOf("Linux") !== -1) os = "Linux";
+      else if (userAgent.indexOf("Android") !== -1) os = "Android";
+      else if (userAgent.indexOf("iOS") !== -1) os = "iOS";
+      return os;
+    }
+
+    // Update the HTML elements with user details
+    async function updateDetails() {
+      const ipAddressElement = document.getElementById('ipAddress');
+      const locationElement = document.getElementById('location');
+      const osElement = document.getElementById('os');
+
+      const ipAddress = await getIpAddress();
+      const location = await getLocation();
+      const os = getOS();
+
+      ipAddressElement.textContent = ipAddress;
+      locationElement.textContent = location;
+      osElement.textContent = os;
+    }
+
+    // Call the function to update user details
+    updateDetails();
+  </script>
+</body>
+</html>
